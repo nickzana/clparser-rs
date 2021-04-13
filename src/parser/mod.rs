@@ -1,5 +1,5 @@
+use crate::argument::Argument;
 use crate::bind::Bind;
-use crate::Argument;
 
 pub mod standard;
 

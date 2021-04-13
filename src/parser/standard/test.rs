@@ -1,8 +1,8 @@
+use crate::argument::Value;
 use crate::bind::Bind;
 use crate::parser::standard::{Argument, StandardParser};
 use crate::parser::Parser;
 use crate::pattern::Pattern;
-use crate::Value;
 
 #[derive(PartialEq, Debug, Clone, Copy)]
 enum CLArguments {
@@ -13,7 +13,7 @@ enum CLArguments {
 #[test]
 fn test_parse_simple_parameter() {
     let bind: Bind<CLArguments> = Bind {
-        name: None,
+        name: "E",
         help: None,
         required: true,
         patterns: vec![Pattern::Flag(&'e')],
@@ -36,7 +36,7 @@ fn test_parse_simple_parameter() {
 #[test]
 fn test_parse_flag() {
     let bind: Bind<CLArguments> = Bind {
-        name: None,
+        name: "Flag",
         help: None,
         required: true,
         patterns: vec![Pattern::Flag(&'f')],
@@ -59,7 +59,7 @@ fn test_parse_flag() {
 #[test]
 fn test_multiple_parameters() {
     let flag: Bind<CLArguments> = Bind {
-        name: None,
+        name: "Flag",
         help: None,
         required: true,
         patterns: vec![Pattern::Flag(&'f')],
@@ -68,7 +68,7 @@ fn test_multiple_parameters() {
     };
 
     let value: Bind<CLArguments> = Bind {
-        name: None,
+        name: "E",
         help: None,
         required: true,
         patterns: vec![Pattern::Flag(&'e')],

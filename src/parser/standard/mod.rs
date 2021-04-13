@@ -1,19 +1,39 @@
+use crate::argument::Argument;
 use crate::bind::Bind;
-use crate::parser::Parser;
-use crate::Argument;
+pub use crate::parser::Parser;
 use std::marker::PhantomData;
+use std::string::ToString;
 
 #[cfg(test)]
 mod test;
 
 #[derive(Debug, PartialEq)]
-pub enum ParseErr<T>
+pub enum ParseErr<'a, T>
 where
     T: Copy,
 {
     UnknownArgument(String),
     MissingRequiredArgument(T),
-    ArgumentMissingParameter(T),
+    ArgumentMissingParameter(&'a Bind<'a, T>),
+}
+
+impl<'a, T> ToString for ParseErr<'a, T>
+where
+    T: Copy,
+{
+    fn to_string(&self) -> String {
+        match self {
+            Self::UnknownArgument(arg) => {
+                format!("Unknown argument: {}", arg)
+            }
+            Self::MissingRequiredArgument(_) => {
+                format!("Missing required argument. See usage for more information.")
+            }
+            Self::ArgumentMissingParameter(bind) => {
+                format!("Used argument {} that requires parameter, but did not provide a parameter. See usage for more information.", bind.name)
+            }
+        }
+    }
 }
 
 // Sensible parsing defaults
@@ -64,9 +84,9 @@ where
 
 impl<'a, T> Parser<'a, T> for StandardParser<'a, T>
 where
-    T: Copy,
+    T: Copy + 'a,
 {
-    type Err = ParseErr<T>;
+    type Err = ParseErr<'a, T>;
 
     fn parse(
         args: Vec<String>,

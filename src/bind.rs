@@ -2,7 +2,7 @@ use crate::pattern::Pattern;
 
 #[derive(Debug, PartialEq)]
 pub struct Bind<'a, T> {
-    pub name: Option<&'static str>,
+    pub name: &'static str,
     pub help: Option<&'static str>,
     pub required: bool,
     pub patterns: Vec<Pattern<'a>>,
